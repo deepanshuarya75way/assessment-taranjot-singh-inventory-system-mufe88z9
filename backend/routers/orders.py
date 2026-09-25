@@ -7,9 +7,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from database import get_db
-from models import Customer, Order, OrderItem, Product
-from schemas import OrderCreate, OrderDetailResponse, OrderResponse
+from ..database import get_db
+from ..models import Customer, Order, OrderItem, Product
+from ..schemas import OrderCreate, OrderDetailResponse, OrderResponse
 
 router = APIRouter()
 

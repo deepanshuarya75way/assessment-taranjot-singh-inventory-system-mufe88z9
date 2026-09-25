@@ -6,9 +6,9 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_db
-from models import OrderItem, Product
-from schemas import ProductCreate, ProductResponse, ProductUpdate
+from ..database import get_db
+from ..models import OrderItem, Product
+from ..schemas import ProductCreate, ProductResponse, ProductUpdate
 
 router = APIRouter()
 
