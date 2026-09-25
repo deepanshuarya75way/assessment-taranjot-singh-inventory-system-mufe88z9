@@ -63,6 +63,29 @@ class ProductResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+# ---------------------------------------------------------------------------
+# Location schemas
+# ---------------------------------------------------------------------------
+
+class LocationCreate(BaseModel):
+    name:str
+    type:str
+
+    @field_validator("type")
+    @classmethod
+    def validate_types(cls, v: str) -> str:
+        allowed_type={"warehouse","store"}
+
+        if v.lower() not in allowed_types:
+            raise ValueError("Type not exists")
+
+class LocationResponse(aseModel):
+    model_config =ConfigDict(from_attribute=True)
+
+    id:UUID
+    name:str
+    type:str
+    model_config =ConfigDict(from_attribute=True)
 
 # ---------------------------------------------------------------------------
 # Customer schemas

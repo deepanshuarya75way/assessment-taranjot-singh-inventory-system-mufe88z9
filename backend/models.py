@@ -8,6 +8,7 @@ from sqlalchemy import (
     Numeric,
     String,
     text,
+    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -29,6 +30,13 @@ class Product(Base):
     sku = Column(String(100), unique=True, nullable=False, index=True)
     price = Column(Numeric(10, 2), nullable=False)
     quantity = Column(Integer, default=0, nullable=False)
+
+    quantity =Column(
+        "Integer",
+        default = 0,
+        nullable=False,
+    )
+
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -39,6 +47,78 @@ class Product(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+
+    
+
+    inventory = realationship("Inventory",back_populates="all, delete-orphan",)
+
+class Location(Base):
+    __tablename__="locations"
+
+    id = Cloumn(
+        UUID(as_uuid = True),
+        primary_key = True,
+        default=uuid4,
+    )
+
+    name = Column(
+        String(255),
+        unique=True,
+        nullable=False,
+    )
+
+    type = Column(
+        string(50),
+        nullable=False,
+    )
+
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    inventory = relationship("Inventory",back_populates="location",cascade="all, delete-orphan")
+
+class Inventory(Base):
+    __tablename__="inventory"
+
+    id = Cloumn(
+        UUID(as_uuid = True),
+        primary_key = True,
+        default=uuid4,
+    )
+
+    product_id = Column(
+        UUID(as_uuid=True),
+        ForiegnKey("products.id",ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    location_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("locations.id",ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    quantity = Column(
+        Integer,
+        default=0,
+        nullable=False,
+    )
+
+    product = relationship("Product",back_populates="inventory",)
+
+    location =relationship("Location",back_populates="inventory,")
+
+    __table_args__=(
+        UniqueConstraint(
+            "product_id",
+            "location_id",
+            name="uq_inventory_product_location",
+        ),
     )
 
 
